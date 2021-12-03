@@ -1,10 +1,10 @@
-import userReducer from "./userReducer";
-import commentReducer from "./commentReducer";
 import { combineReducers } from "redux";
+import auth from "./auth";
+import message from "./message";
 
 const rootReducer = combineReducers({
-	userReducer,
-	commentReducer,
+  auth,
+  message,
 });
 
 export default rootReducer;
