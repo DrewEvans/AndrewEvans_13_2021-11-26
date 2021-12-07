@@ -15,9 +15,19 @@ const login = async (username, password) => {
     username,
     password,
   });
+
   if (response.data.accessToken) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
+  return response.data;
+};
+const userProfile = async (token) => {
+  const response = await axios.post(API_URL + "profile", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   return response.data;
 };
 
@@ -29,6 +39,7 @@ const exportUserServices = {
   register,
   login,
   logout,
+  userProfile,
 };
 
 export default exportUserServices;
