@@ -1,34 +1,24 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, Login, Register, Profile } from "./components/index";
-
-import logo from "./assets/img/argentBankLogo.png";
-import { Navbar, Container } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Home, Login, Register, Profile, Navbar } from "./components/index";
 
 function App() {
+  console.log(localStorage);
+
   return (
     <BrowserRouter>
-      <Navbar>
-        <Container>
-          <Navbar.Brand href='/'>
-            <img
-              src={logo}
-              // width='30'
-              // height='30'
-              className='d-inline-block align-top'
-              alt='React Bootstrap logo'
-            />
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-
-      <Routes>
-        <Route exact path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Register />} />
-        <Route path='/profile' element={<Profile />} />
-      </Routes>
+      <div className='App'>
+        <Navbar />
+        <Routes>
+          <Route exact path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Register />} />
+          <Route path='/profile' element={<Profile />} />
+        </Routes>
+        <footer className='footer'>
+          <p className='footer-text'>Copyright 2020 Argent Bank</p>
+        </footer>
+      </div>
     </BrowserRouter>
   );
 }

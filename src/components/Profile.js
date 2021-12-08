@@ -1,31 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import jwt from "jsonwebtoken";
-import { userProfile } from "../actions/auth";
-import axios from "axios";
+import { getProfile } from "../actions/auth";
 
 const Profile = (props) => {
-  const [loading, setLoading] = useState(false);
   const { user: currentUser } = useSelector((state) => state.auth);
+  const { profile: user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  // const USER_ID = jwt.decode(currentUser.body.token);
-  // console.log(currentUser.body.token);
 
-  console.log(currentUser);
+  useEffect(() => {
+    dispatch(getProfile(currentUser.body.token));
+  }, []);
+
+  // const { email, firstName, lastName } = user;
+
+  // console.log(email);
+  // console.log(firstName);
+  // console.log(lastName);
+
+  console.log(localStorage.getItem("userData"));
 
   if (!currentUser) {
     return <Navigate to='/login' />;
   }
 
-  console.log(localStorage);
-
-  console.log(dispatch(userProfile(currentUser.body.token)));
-
   return (
     <div className='container'>
-      <p>{currentUser.body.token}</p>
-      <p>{currentUser.message}</p>
+      {user && (
+        <>
+          <p>{user.firstName}</p>
+          <p>{user.lastName}</p>
+          <p>{user.email}</p>
+        </>
+      )}
     </div>
   );
 };

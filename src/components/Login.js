@@ -42,9 +42,6 @@ const Login = (props) => {
     setPassword(password);
   };
 
-  console.log(username);
-  console.log(password);
-
   const handleLogin = (e) => {
     e.preventDefault();
 
@@ -54,6 +51,9 @@ const Login = (props) => {
 
     if (checkBtn.current.context._errors.length === 0) {
       dispatch(login(username, password))
+        .then(() => {
+          dispatch();
+        })
         .then(() => {
           props.history.push("/profile");
           window.location.reload();

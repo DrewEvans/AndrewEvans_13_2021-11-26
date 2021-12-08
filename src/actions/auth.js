@@ -3,6 +3,8 @@ import {
   REGISTER_FAIL,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  SET_USER,
+  USER_FAIL,
   LOGOUT,
   SET_MESSAGE,
 } from "./types";
@@ -77,36 +79,41 @@ export const login = (email, password) => (dispatch) => {
   );
 };
 
-export const userProfile = (token) => (dispatch) => {
-  return AuthService.userProfile(token).then(
-    (data) => {
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: { profile: data },
-      });
+export const getProfile = (token) => async (dispatch) => {
+  const data = await AuthService.getProfile(token);
+  console.log(data);
 
-      return Promise.resolve();
-    },
-    (error) => {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+  dispatch({
+    type: SET_USER,
+    payload: { userData: data },
+  });
 
-      dispatch({
-        type: LOGIN_FAIL,
-      });
-
-      dispatch({
-        type: SET_MESSAGE,
-        payload: message,
-      });
-
-      return Promise.reject();
-    }
-  );
+  return data;
+  // return AuthService.getProfile(token).then(
+  //   (data) => {
+  //     dispatch({
+  //       type: SET_USER,
+  //       payload: { profile: data },
+  //     });
+  //     return Promise.resolve();
+  //   },
+  //   (error) => {
+  //     const message =
+  //       (error.response &&
+  //         error.response.data &&
+  //         error.response.data.message) ||
+  //       error.message ||
+  //       error.toString();
+  //     dispatch({
+  //       type: USER_FAIL,
+  //     });
+  //     dispatch({
+  //       type: SET_MESSAGE,
+  //       payload: message,
+  //     });
+  //     return Promise.reject();
+  //   }
+  // );
 };
 
 export const logout = () => (dispatch) => {

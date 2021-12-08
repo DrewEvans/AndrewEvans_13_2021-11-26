@@ -21,12 +21,18 @@ const login = async (username, password) => {
   }
   return response.data;
 };
-const userProfile = async (token) => {
-  const response = await axios.post(API_URL + "profile", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+const getProfile = async (token) => {
+  let headersList = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  let reqOptions = {
+    url: "http://localhost:3001/api/v1/user/profile",
+    method: "POST",
+    headers: headersList,
+  };
+
+  const response = await axios.request(reqOptions);
 
   return response.data;
 };
@@ -39,7 +45,7 @@ const exportUserServices = {
   register,
   login,
   logout,
-  userProfile,
+  getProfile,
 };
 
 export default exportUserServices;

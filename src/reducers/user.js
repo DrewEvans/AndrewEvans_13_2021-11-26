@@ -1,10 +1,4 @@
-import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT,
-} from "../actions/types";
+import { SET_USER, USER_FAIL } from "../actions/types";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -14,31 +8,16 @@ const initialState = user
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
-
+  console.log(payload);
   switch (type) {
-    case REGISTER_SUCCESS:
-      return {
-        ...state,
-        isLoggedIn: false,
-      };
-    case REGISTER_FAIL:
-      return {
-        ...state,
-        isLoggedIn: false,
-      };
-    case LOGIN_SUCCESS:
+    case SET_USER:
       return {
         ...state,
         isLoggedIn: true,
         user: payload.user,
+        profile: payload.userData.body,
       };
-    case LOGIN_FAIL:
-      return {
-        ...state,
-        isLoggedIn: false,
-        user: null,
-      };
-    case LOGOUT:
+    case USER_FAIL:
       return {
         ...state,
         isLoggedIn: false,
