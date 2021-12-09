@@ -39,7 +39,7 @@ const Home = () => {
             alt='Security Icon'
             className='feature-icon'
           />
-          <h3 classNameName='feature-item-title'>Security you can trust</h3>
+          <h3 className='feature-item-title'>Security you can trust</h3>
           <p>
             We use top of the line encryption to make sure your data and money
             is always safe.

@@ -12,8 +12,8 @@ import { login } from "../actions/auth";
 const required = (value) => {
   if (!value) {
     return (
-      <div className='alert' role='alert'>
-        this field is required!
+      <div className='alert alert-danger' role='alert'>
+        Field is required!
       </div>
     );
   }
@@ -71,13 +71,13 @@ const Login = (props) => {
   }
 
   return (
-    <div>
-      <div className='card card-container'>
-        <img alt='profile-img' />
-
+    <main className='card card-container'>
+      <section class='sign-in-content'>
+        <i class='fa fa-user-circle sign-in-icon'></i>
+        <h1>Sign In</h1>
         <Form onSubmit={handleLogin} ref={form}>
-          <div>
-            <label htmlFor='username'>Username</label>
+          <div class='input-wrapper'>
+            <label for='username'>Username</label>
             <Input
               type='text'
               className='form-control'
@@ -87,9 +87,8 @@ const Login = (props) => {
               validations={[required]}
             />
           </div>
-
-          <div className='form-group'>
-            <label htmlFor='password'>Password</label>
+          <div class='input-wrapper'>
+            <label for='password'>Password</label>
             <Input
               type='password'
               className='form-control'
@@ -99,14 +98,15 @@ const Login = (props) => {
               validations={[required]}
             />
           </div>
-
-          <div>
-            <button disabled={loading}>
-              {loading && <span>...</span>}
-              <span>Login</span>
-            </button>
+          <div className='input-remember'>
+            <Input type='checkbox' id='remember-me' />
+            <label for='remember-me'>Remember me</label>
           </div>
 
+          <button className='sign-in-button' disabled={loading}>
+            {loading && <span>...</span>}
+            Sign In
+          </button>
           {message && (
             <div>
               <div role='alert'>{message}</div>
@@ -114,8 +114,8 @@ const Login = (props) => {
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 
