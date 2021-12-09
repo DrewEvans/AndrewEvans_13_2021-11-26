@@ -7,6 +7,7 @@ import {
   USER_FAIL,
   LOGOUT,
   SET_MESSAGE,
+  EDIT_USER,
 } from "./types";
 
 import AuthService from "../services/auth.service";
@@ -89,32 +90,19 @@ export const getProfile = (token) => async (dispatch) => {
   });
 
   return data;
-  // return AuthService.getProfile(token).then(
-  //   (data) => {
-  //     dispatch({
-  //       type: SET_USER,
-  //       payload: { profile: data },
-  //     });
-  //     return Promise.resolve();
-  //   },
-  //   (error) => {
-  //     const message =
-  //       (error.response &&
-  //         error.response.data &&
-  //         error.response.data.message) ||
-  //       error.message ||
-  //       error.toString();
-  //     dispatch({
-  //       type: USER_FAIL,
-  //     });
-  //     dispatch({
-  //       type: SET_MESSAGE,
-  //       payload: message,
-  //     });
-  //     return Promise.reject();
-  //   }
-  // );
 };
+export const updateProfile =
+  (token, firstName, lastName) => async (dispatch) => {
+    const data = await AuthService.updateProfile(token, firstName, lastName);
+    console.log(data);
+
+    dispatch({
+      type: EDIT_USER,
+      payload: { userData: data },
+    });
+
+    return data;
+  };
 
 export const logout = () => (dispatch) => {
   AuthService.logout();

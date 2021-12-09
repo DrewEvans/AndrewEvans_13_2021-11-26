@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getProfile } from "../actions/auth";
+import { getProfile, updateProfile } from "../actions/auth";
 
-const Profile = (props) => {
+const Profile = () => {
   const { user: currentUser } = useSelector((state) => state.auth);
   const { profile: user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -12,28 +12,34 @@ const Profile = (props) => {
     dispatch(getProfile(currentUser.body.token));
   }, []);
 
-  // const { email, firstName, lastName } = user;
-
-  // console.log(email);
-  // console.log(firstName);
-  // console.log(lastName);
-
-  console.log(localStorage.getItem("userData"));
-
   if (!currentUser) {
     return <Navigate to='/login' />;
   }
 
   return (
-    <div className='container'>
+    <>
       {user && (
-        <>
-          <p>{user.firstName}</p>
-          <p>{user.lastName}</p>
-          <p>{user.email}</p>
-        </>
+        <main className='main bg-dark'>
+          <div className='header'>
+            <h1>
+              Welcome back
+              <br />
+              {`${user.firstName} ${user.lastName}`}!
+            </h1>
+            <button
+              className='edit-button'
+              onClick={(e) => {
+                dispatch(
+                  updateProfile(currentUser.body.token, "Steve", "Rogers")
+                );
+              }}>
+              Edit Name
+            </button>
+          </div>
+          <h2 className='sr-only'>Accounts</h2>
+        </main>
       )}
-    </div>
+    </>
   );
 };
 

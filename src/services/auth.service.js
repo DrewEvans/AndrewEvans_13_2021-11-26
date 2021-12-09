@@ -36,6 +36,25 @@ const getProfile = async (token) => {
 
   return response.data;
 };
+const updateProfile = async (token, firstName, lastName) => {
+  let headersList = {
+    Authorization: `Bearer ${token}`,
+  };
+  console.log(firstName);
+  let reqOptions = {
+    url: "http://localhost:3001/api/v1/user/profile",
+    method: "PUT",
+    headers: headersList,
+    data: {
+      firstName: firstName,
+      lastName: lastName,
+    },
+  };
+
+  const response = await axios.request(reqOptions);
+
+  return response.data;
+};
 
 const logout = () => {
   localStorage.removeItem("user");
@@ -46,6 +65,7 @@ const exportUserServices = {
   login,
   logout,
   getProfile,
+  updateProfile,
 };
 
 export default exportUserServices;

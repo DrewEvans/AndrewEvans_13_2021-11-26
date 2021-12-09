@@ -1,10 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 import { logout } from "../actions/auth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/img/argentBankLogo.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
+
+const signoutIcon = <FontAwesomeIcon icon={faSignOutAlt} />;
+const userCircleIcon = <FontAwesomeIcon icon={faUserCircle} />;
 
 const Navbar = () => {
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -27,7 +32,7 @@ const Navbar = () => {
               {user && (
                 <div>
                   <Link className='main-nav-item' to='/profile'>
-                    <i class='fa fa-user-circle'></i>
+                    {userCircleIcon}
                     {user.firstName}
                   </Link>
 
@@ -35,7 +40,7 @@ const Navbar = () => {
                     className='main-nav-item'
                     to='/'
                     onClick={dispatch(logout)}>
-                    <i className='fa fa-sign-out'></i>
+                    {signoutIcon}
                     Sign Out
                   </Link>
                 </div>

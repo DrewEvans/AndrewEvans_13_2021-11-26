@@ -1,4 +1,4 @@
-import { SET_USER, USER_FAIL } from "../actions/types";
+import { SET_USER, USER_FAIL, EDIT_USER } from "../actions/types";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -22,6 +22,13 @@ export default function (state = initialState, action) {
         ...state,
         isLoggedIn: false,
         user: null,
+      };
+    case EDIT_USER:
+      return {
+        ...state,
+        isLoggedIn: true,
+        user: payload.user,
+        profile: payload.userData.body,
       };
     default:
       return state;
