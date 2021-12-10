@@ -1,7 +1,10 @@
 import { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
@@ -9,11 +12,34 @@ import CheckButton from "react-validation/build/button";
 
 import { login } from "../actions/auth";
 
+const userCircleIcon = (
+  <FontAwesomeIcon className='sign-in-icon' icon={faUserCircle} />
+);
+
 const required = (value) => {
   if (!value) {
     return (
       <div className='alert alert-danger' role='alert'>
         Field is required!
+      </div>
+    );
+  }
+};
+const emailValidation = (value) => {
+  const regex =
+    /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
+  if (!value) {
+    return (
+      <span className='alert alert-danger help-block' role='alert'>
+        Field is required!
+      </span>
+    );
+  }
+  if (regex.test(value) === false) {
+    return (
+      <div className='alert alert-danger' role='alert'>
+        Username is incorrect!
       </div>
     );
   }
@@ -32,6 +58,8 @@ const Login = (props) => {
 
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
   const onChangeUsername = (e) => {
     const username = e.target.value;
     setUsername(username);
@@ -44,9 +72,7 @@ const Login = (props) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     setLoading(true);
-
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
@@ -55,7 +81,7 @@ const Login = (props) => {
           dispatch();
         })
         .then(() => {
-          props.history.push("/profile");
+          navigate("/profile");
           window.location.reload();
         })
         .catch(() => {
@@ -72,23 +98,23 @@ const Login = (props) => {
 
   return (
     <main className='card card-container'>
-      <section class='sign-in-content'>
-        <i class='fa fa-user-circle sign-in-icon'></i>
+      <section className='sign-in-content'>
+        {userCircleIcon}
         <h1>Sign In</h1>
         <Form onSubmit={handleLogin} ref={form}>
-          <div class='input-wrapper'>
-            <label for='username'>Username</label>
+          <div className='input-wrapper'>
+            <label htmlFor='username'>Username</label>
             <Input
               type='text'
               className='form-control'
               name='username'
               value={username}
               onChange={onChangeUsername}
-              validations={[required]}
+              validations={[emailValidation]}
             />
           </div>
-          <div class='input-wrapper'>
-            <label for='password'>Password</label>
+          <div className='input-wrapper'>
+            <label htmlFor='password'>Password</label>
             <Input
               type='password'
               className='form-control'
@@ -100,7 +126,7 @@ const Login = (props) => {
           </div>
           <div className='input-remember'>
             <Input type='checkbox' id='remember-me' />
-            <label for='remember-me'>Remember me</label>
+            <label htmlFor='remember-me'>Remember me</label>
           </div>
 
           <button className='sign-in-button' disabled={loading}>

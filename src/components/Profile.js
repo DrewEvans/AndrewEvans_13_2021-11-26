@@ -3,8 +3,19 @@ import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getProfile, updateProfile } from "../actions/auth";
 import { Modal, ModalFooter } from "react-bootstrap";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const nameValidation = (value) => {
+  if (!value) {
+    return (
+      <span className='alert alert-danger help-block' role='alert'>
+        Field is required!
+      </span>
+    );
+  }
+};
 const Profile = () => {
   const [show, setShow] = useState(false);
 
@@ -69,21 +80,22 @@ const Profile = () => {
               <Modal.Title>Edit Name</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <form>
+              <Form>
                 <div className='input-wrapper'>
                   <label for='username'>First Name</label>
-                  <input
+                  <Input
                     className='my-1 form-control'
                     type='text'
                     id='firstname'
                     value={firstName}
                     onChange={onChangeFirstName}
                     placeholder={user.firstName}
+                    validations={[nameValidation]}
                   />
                 </div>
                 <div className='input-wrapper'>
                   <label for='text'>Last Name</label>
-                  <input
+                  <Input
                     className='my-1 form-control'
                     type='text'
                     id='lastname'
@@ -91,6 +103,7 @@ const Profile = () => {
                     value={lastName}
                     onChange={onChangeLastName}
                     placeholder={user.lastName}
+                    validations={[nameValidation]}
                   />
                 </div>
                 <ModalFooter>
@@ -107,7 +120,7 @@ const Profile = () => {
                     Save Changes
                   </button>
                 </ModalFooter>
-              </form>
+              </Form>
             </Modal.Body>
           </Modal>
           <h2 className='sr-only'>Accounts</h2>
