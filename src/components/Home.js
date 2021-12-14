@@ -1,8 +1,21 @@
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getProfile } from "../actions/auth";
 import chatIcon from "../assets/img/icon-chat.png";
 import moneyIcon from "../assets/img/icon-money.png";
 import securityIcon from "../assets/img/icon-security.png";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: currentUser } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(getProfile(currentUser.token));
+    }
+  }, []);
+
   return (
     <main>
       <div className='hero'>

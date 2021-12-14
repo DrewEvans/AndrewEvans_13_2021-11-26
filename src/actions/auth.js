@@ -3,7 +3,7 @@ import {
   REGISTER_FAIL,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  SET_USER,
+  LOAD_USER,
   LOGOUT,
   SET_MESSAGE,
   EDIT_USER,
@@ -52,7 +52,17 @@ export const login = (email, password) => (dispatch) => {
     (data) => {
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: { user: data },
+        payload: {
+          user: {
+            status: data.status,
+            message: data.message,
+            token: data.body.token,
+            firstName: null,
+            lastName: null,
+            id: null,
+            email: null,
+          },
+        },
       });
 
       return Promise.resolve();
@@ -80,27 +90,115 @@ export const login = (email, password) => (dispatch) => {
 };
 
 export const getProfile = (token) => async (dispatch) => {
-  const data = await AuthService.getProfile(token);
-  console.log(data);
+  return AuthService.getProfile(token).then(
+    (data) => {
+      console.log(token);
+      console.log(data);
+      dispatch({
+        type: LOAD_USER,
+        payload: {
+          user: {
+            status: data.status,
+            message: data.message,
+            token: token,
+            firstName: data.body.firstName,
+            lastName: data.body.lastName,
+            id: data.body.id,
+            email: data.body.email,
+          },
+        },
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
 
-  dispatch({
-    type: SET_USER,
-    payload: { userData: data },
-  });
+      dispatch({
+        type: LOGIN_FAIL,
+      });
 
-  return data;
+      dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+      });
+
+      return Promise.reject();
+    }
+  );
 };
+
 export const updateProfile =
   (token, firstName, lastName) => async (dispatch) => {
-    const data = await AuthService.updateProfile(token, firstName, lastName);
-    console.log(data);
+    return AuthService.updateProfile(token, firstName, lastName).then(
+      (data) => {
+        console.log(token);
+        console.log(data);
+        dispatch({
+          type: EDIT_USER,
+          payload: {
+            user: {
+              status: data.status,
+              message: data.message,
+              token: token,
+              firstName: data.body.firstName,
+              lastName: data.body.lastName,
+              id: data.body.id,
+              email: data.body.email,
+            },
+          },
+        });
+        return Promise.resolve();
+      },
+      (error) => {
+        const message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-    dispatch({
-      type: EDIT_USER,
-      payload: { userData: data },
-    });
+        dispatch({
+          type: LOGIN_FAIL,
+        });
 
-    return data;
+        dispatch({
+          type: SET_MESSAGE,
+          payload: message,
+        });
+
+        return Promise.reject();
+      }
+    );
+
+    // const data = await AuthService.updateProfile(token, firstName, lastName);
+    // console.log(data);
+    // console.log(token);
+
+    // dispatch({
+    //   type: EDIT_USER,
+    //   payload: {
+    //     user: {
+    //       payload: {
+    //         user: {
+    //           status: data.status,
+    //           message: data.message,
+    //           token: token,
+    //           firstName: data.body.firstName,
+    //           lastName: data.body.lastName,
+    //           id: data.body.id,
+    //           email: data.body.email,
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+
+    // return data;
   };
 
 export const logout = () => (dispatch) => {

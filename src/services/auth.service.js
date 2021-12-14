@@ -16,9 +16,12 @@ const login = async (username, password) => {
     password,
   });
 
-  if (response.data.accessToken) {
-    localStorage.setItem("user", JSON.stringify(response.data));
+  if (response.data.body.token) {
+    const token = response.data.body.token;
+
+    localStorage.setItem("user", token);
   }
+
   return response.data;
 };
 const getProfile = async (token) => {
@@ -40,7 +43,7 @@ const updateProfile = async (token, firstName, lastName) => {
   let headersList = {
     Authorization: `Bearer ${token}`,
   };
-  console.log(firstName);
+
   let reqOptions = {
     url: "http://localhost:3001/api/v1/user/profile",
     method: "PUT",

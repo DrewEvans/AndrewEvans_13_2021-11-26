@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getProfile, updateProfile } from "../actions/auth";
 import { Modal, ModalFooter } from "react-bootstrap";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const nameValidation = (value) => {
@@ -17,6 +18,9 @@ const nameValidation = (value) => {
   }
 };
 const Profile = () => {
+  const form = useRef();
+  const checkBtn = useRef();
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -26,13 +30,14 @@ const Profile = () => {
   const [lastName, setLastName] = useState();
 
   const { user: currentUser } = useSelector((state) => state.auth);
-  const { profile: user } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProfile(currentUser.body.token));
+    dispatch(getProfile(currentUser.token));
   }, []);
+
+  console.log(currentUser);
 
   const onChangeFirstName = (e) => {
     const firstName = e.target.value;
@@ -45,15 +50,20 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateProfile(currentUser.body.token, firstName, lastName));
-    handleClose();
+
+    form.current.validateAll();
+
+    if (checkBtn.current.context._errors.length === 0) {
+      dispatch(updateProfile(currentUser.token, firstName, lastName));
+      handleClose();
+    }
   };
   const handleClearEdit = (e) => {
     e.preventDefault();
     handleClose();
     setTimeout(() => {
-      setFirstName(user.firstName);
-      setLastName(user.lastName);
+      setFirstName(currentUser.firstName);
+      setLastName(currentUser.lastName);
     }, 300);
   };
 
@@ -63,13 +73,13 @@ const Profile = () => {
 
   return (
     <>
-      {user && (
+      {currentUser && (
         <main className='main bg-dark'>
           <div className='header'>
             <h1>
               Welcome back
               <br />
-              {`${user.firstName} ${user.lastName}`}!
+              {`${currentUser.firstName} ${currentUser.lastName}`}!
             </h1>
             <button className='edit-button' onClick={handleShow}>
               Edit Name
@@ -80,16 +90,16 @@ const Profile = () => {
               <Modal.Title>Edit Name</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Form>
+              <Form onSubmit={handleSubmit} ref={form}>
                 <div className='input-wrapper'>
-                  <label for='username'>First Name</label>
+                  <label htmlFor='username'>First Name</label>
                   <Input
                     className='my-1 form-control'
                     type='text'
                     id='firstname'
                     value={firstName}
                     onChange={onChangeFirstName}
-                    placeholder={user.firstName}
+                    placeholder={currentUser.firstName}
                     validations={[nameValidation]}
                   />
                 </div>
@@ -102,7 +112,7 @@ const Profile = () => {
                     type='text'
                     value={lastName}
                     onChange={onChangeLastName}
-                    placeholder={user.lastName}
+                    placeholder={currentUser.lastName}
                     validations={[nameValidation]}
                   />
                 </div>
@@ -116,9 +126,11 @@ const Profile = () => {
                   <button
                     className='edit-button '
                     type='submit'
-                    onClick={handleSubmit}>
+                    //onClick={handleSubmit}
+                  >
                     Save Changes
                   </button>
+                  <CheckButton style={{ display: "none" }} ref={checkBtn} />
                 </ModalFooter>
               </Form>
             </Modal.Body>

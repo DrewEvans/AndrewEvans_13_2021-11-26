@@ -31,7 +31,7 @@ const emailValidation = (value) => {
 
   if (!value) {
     return (
-      <span className='alert alert-danger help-block' role='alert'>
+      <span className='alert alert-danger' role='alert'>
         Field is required!
       </span>
     );
@@ -133,11 +133,6 @@ const Login = (props) => {
             {loading && <span>...</span>}
             Sign In
           </button>
-          {message && (
-            <div>
-              <div role='alert'>{message}</div>
-            </div>
-          )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
       </section>

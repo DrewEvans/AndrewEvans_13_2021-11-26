@@ -1,19 +1,27 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, Login, Register, Profile, Navbar } from "./components/index";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route, useRoutes } from "react-router-dom";
+import {
+  Home,
+  Login,
+  Register,
+  Profile,
+  Navbar,
+  ProtectedRoutes,
+} from "./components/index";
 
 function App() {
-  console.log(localStorage);
-
   return (
     <BrowserRouter>
       <div className='App'>
         <Navbar />
         <Routes>
-          <Route exact path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Register />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route exact path='/' element={<Home />} />
+            <Route path='/profile' element={<Profile />} />
+          </Route>
         </Routes>
         <footer className='footer'>
           <p className='footer-text'>Copyright 2020 Argent Bank</p>

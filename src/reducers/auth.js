@@ -4,9 +4,19 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  EDIT_USER,
+  LOAD_USER,
 } from "../actions/types";
 
-const user = JSON.parse(localStorage.getItem("user"));
+const user = {
+  status: null,
+  message: null,
+  token: localStorage.getItem("user"),
+  firstName: null,
+  lastName: null,
+  id: null,
+  email: null,
+};
 
 const initialState = user
   ? { isLoggedIn: true, user }
@@ -43,6 +53,19 @@ export default function (state = initialState, action) {
         ...state,
         isLoggedIn: false,
         user: null,
+      };
+    case LOAD_USER:
+      return {
+        ...state,
+        isLoggedIn: true,
+        user: payload.user,
+      };
+
+    case EDIT_USER:
+      return {
+        ...state,
+        isLoggedIn: true,
+        user: payload.user,
       };
     default:
       return state;

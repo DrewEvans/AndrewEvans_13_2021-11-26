@@ -13,7 +13,8 @@ const userCircleIcon = <FontAwesomeIcon icon={faUserCircle} />;
 
 const Navbar = () => {
   const { user: currentUser } = useSelector((state) => state.auth);
-  const { profile: user } = useSelector((state) => state.user);
+  const { isLoggedIn: loggedIn } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   return (
@@ -27,13 +28,13 @@ const Navbar = () => {
           />
         </Link>
         <div>
-          {currentUser ? (
+          {loggedIn ? (
             <>
-              {user && (
+              {currentUser && (
                 <div>
                   <Link className='main-nav-item' to='/profile'>
                     {userCircleIcon}
-                    {user.firstName}
+                    {currentUser.firstName}
                   </Link>
 
                   <Link
