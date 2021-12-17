@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router";
-import Login from "./Login";
 
 const useAuth = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);

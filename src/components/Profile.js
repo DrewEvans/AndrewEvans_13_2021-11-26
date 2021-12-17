@@ -11,9 +11,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const nameValidation = (value) => {
   if (!value) {
     return (
-      <span className='alert alert-danger help-block' role='alert'>
+      <div className='alert alert-danger help-block' role='alert'>
         Field is required!
-      </span>
+      </div>
     );
   }
 };
