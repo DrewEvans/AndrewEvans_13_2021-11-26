@@ -31,9 +31,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ##### Routes:
 
--   http://localhost:5000/
+-   http://localhost:3000/
 -   http://localhost:3000/login
--   http://localhost:5000/profile
+-   http://localhost:3000/profile
 
 ### Features
 
